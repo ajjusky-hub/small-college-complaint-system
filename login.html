@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login - Smart Complaint System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="student.html">Submit Complaint</a>
+        <a href="track.html">Track Complaint</a>
+        <a href="admin.html">Admin</a>
+    </nav>
+
+    <div class="hero">
+
+        <h1>🔐 Login</h1>
+
+        <p>Login to access the complaint system</p>
+
+        <input
+            type="text"
+            id="username"
+            placeholder="Enter username"
+        >
+
+        <br><br>
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Enter password"
+        >
+
+        <br><br>
+
+        <button onclick="login()">
+            Login
+        </button>
+
+        <p id="message"></p>
+
+    </div>
+
+    <script>
+
+        function login() {
+
+            let username =
+                document.getElementById("username").value;
+
+            let password =
+                document.getElementById("password").value;
+
+            if (username === "student" && password === "1234") {
+
+                window.location.href = "student.html";
+
+            }
+
+            else if (username === "admin" && password === "admin123") {
+
+                window.location.href = "admin.html";
+
+            }
+
+            else {
+
+                document.getElementById("message").innerText =
+                    "❌ Invalid username or password";
+
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>

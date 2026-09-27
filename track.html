@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Track Complaint</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav>
+
+    <a href="index.html">Home</a>
+
+    <a href="student.html">Submit Complaint</a>
+
+    <a href="track.html">Track Complaint</a>
+
+    <a href="admin.html">Admin</a>
+
+</nav>
+
+    <h1>Track Your Complaint</h1>
+
+    <input
+        type="text"
+        id="complaintId"
+        placeholder="Enter Complaint ID"
+    >
+
+    <br><br>
+
+    <button onclick="trackComplaint()">
+        Check Status
+    </button>
+
+    <div id="result"></div>
+
+
+    <script>
+
+        function trackComplaint() {
+
+            let id = document.getElementById("complaintId").value;
+
+            let complaints =
+                JSON.parse(localStorage.getItem("complaints")) || [];
+
+            let complaint = complaints.find(function(item) {
+
+                return item.id === id;
+
+            });
+
+            let result = document.getElementById("result");
+
+            if (complaint) {
+
+                result.innerHTML =
+                    "<h2>Complaint Found</h2>" +
+                    "<p><b>Complaint:</b> " +
+                    complaint.complaint + "</p>" +
+
+                    "<p><b>Category:</b> " +
+                    complaint.category + "</p>" +
+
+                    "<p><b>Status:</b> " +
+                    complaint.status + "</p>";
+
+            } else {
+
+                result.innerHTML =
+                    "<p>Complaint ID not found.</p>";
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>

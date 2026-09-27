@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav>
+
+    <a href="index.html">Home</a>
+
+    <a href="student.html">Submit Complaint</a>
+
+    <a href="track.html">Track Complaint</a>
+
+    <a href="admin.html">Admin</a>
+
+</nav>
+
+    <h1>Admin Dashboard</h1>
+
+    <div id="summary"></div>
+
+    <table border="1" cellpadding="10" align="center">
+
+        <thead>
+            <tr>
+                <th>Complaint ID</th>
+                <th>Student</th>
+                <th>Department</th>
+                <th>Complaint</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="complaintTable">
+        </tbody>
+
+    </table>
+
+    <script>
+
+        let complaints =
+            JSON.parse(localStorage.getItem("complaints")) || [];
+
+        let table =
+            document.getElementById("complaintTable");
+
+
+        // Show dashboard summary
+        function showSummary() {
+
+            let total = complaints.length;
+
+            let pending = complaints.filter(function(item) {
+                return item.status === "Pending";
+            }).length;
+
+            let progress = complaints.filter(function(item) {
+                return item.status === "In Progress";
+            }).length;
+
+            let resolved = complaints.filter(function(item) {
+                return item.status === "Resolved";
+            }).length;
+
+            document.getElementById("summary").innerHTML =
+                "<h3>Total: " + total +
+                " | Pending: " + pending +
+                " | In Progress: " + progress +
+                " | Resolved: " + resolved +
+                "</h3>";
+        }
+
+
+        // Display complaints
+        function displayComplaints() {
+
+            table.innerHTML = "";
+
+            complaints.forEach(function(item, index) {
+
+                let row = table.insertRow();
+
+                row.insertCell(0).innerText = item.id;
+                row.insertCell(1).innerText = item.name;
+                row.insertCell(2).innerText = item.department;
+                row.insertCell(3).innerText = item.complaint;
+                row.insertCell(4).innerText = item.category;
+                let statusCell = row.insertCell(5);
+
+let statusClass = "";
+
+if (item.status === "Pending") {
+    statusClass = "pending";
+}
+else if (item.status === "In Progress") {
+    statusClass = "progress";
+}
+else if (item.status === "Resolved") {
+    statusClass = "resolved";
+}
+
+statusCell.innerHTML =
+    "<span class='status " + statusClass + "'>" +
+    item.status +
+    "</span>";
+
+
+                // Priority
+                let priorityCell = row.insertCell(6);
+
+                let priority = item.priority || "Low";
+
+                let priorityClass = priority.toLowerCase();
+
+priorityCell.innerHTML =
+    "<span class='priority " + priorityClass + "'>" +
+    priority +
+    "</span>";
+
+
+                // Action
+                let actionCell = row.insertCell(7);
+
+                let select =
+                    document.createElement("select");
+
+                let statuses = [
+                    "Pending",
+                    "In Progress",
+                    "Resolved"
+                ];
+
+
+                statuses.forEach(function(status) {
+
+                    let option =
+                        document.createElement("option");
+
+                    option.value = status;
+                    option.text = status;
+
+                    if (item.status === status) {
+                        option.selected = true;
+                    }
+
+                    select.appendChild(option);
+
+                });
+
+
+                // Change status
+                select.addEventListener("change", function() {
+
+                    complaints[index].status =
+                        this.value;
+
+                    localStorage.setItem(
+                        "complaints",
+                        JSON.stringify(complaints)
+                    );
+
+                    displayComplaints();
+                    showSummary();
+
+                });
+
+
+                actionCell.appendChild(select);
+
+            });
+
+        }
+
+
+        // Start dashboard
+        displayComplaints();
+        showSummary();
+
+    </script>
+
+</body>
+
+</html>
